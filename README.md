@@ -28,7 +28,7 @@ Printer is currently under active development. It means that it is not completed
 + Inactive extruder filament dump
 
 ## Known bugs:
-+ No blind joint holes if frame profiles
++ No blind joint holes in frame profiles
 + No belt tensioner knob cover
 + More? Write an issue
 
