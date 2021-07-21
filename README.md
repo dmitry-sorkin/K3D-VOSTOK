@@ -1,4 +1,4 @@
-## [Русское описание](https://github.com/dmitry-sorkin/K3D-VOSTOK/blob/276065de26f8e1a8714e55797d48e3a137bc6aea/README.ru.md)
+## [Русское описание](README.ru.md)
 
 # K3D VOSTOK
 K3D VOSTOK - is modular IDEX 3D printer. It's designed to be relatively cheap, but with advanced functionality and characteristics.
