@@ -21,9 +21,7 @@ Printer is currently under active development. It means that it is not completed
 
 ## Whats not done yet:
 + English translation of BOM
-+ Enclosure models
 + Assembly instructions
-+ Volcano fan ducts
 + Wires calculator
 + Inactive extruder filament dump
 
