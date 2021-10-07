@@ -21,6 +21,9 @@ Backup of *.doc*
 # Visio autosave temporary files
 */*.~vsd*
 
+#DXF drawings
+*.dxf
+
 # Main assemblies
 V05-00-00*.iges
 V05-00-00*.stp
