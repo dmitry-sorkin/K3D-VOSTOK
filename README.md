@@ -19,16 +19,5 @@ Printer is currently under active development. It means that it is not completed
 + Mechanics assembly v0.4 - [https://youtu.be/Bai2vrzamXQ]
 + Tests v0.4 - [https://youtu.be/iSiEH9th0KM]
 
-## Whats not done yet:
-+ English translation of BOM
-+ Assembly instructions
-+ Wires calculator
-+ Inactive extruder filament dump
-
-## Known bugs:
-+ No blind joint holes in frame profiles
-+ No belt tensioner knob cover
-+ More? Write an issue
-
 ## How to contribute:
 Assemble and test. Most of bugs can only be found in real 3d printer usage.
