@@ -25,7 +25,7 @@ Backup of *.doc*
 *.dxf
 
 # Main assemblies
-V05-00-00*.iges
-V05-00-00*.stp
-V05-00-00*.step
+*-00-00*.iges
+*-00-00*.stp
+*-00-00*.step
 
