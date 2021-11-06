@@ -31,6 +31,8 @@
 //     then scales it to SCALE_X, SCALE_Y and rotates by ANGLE
 // SHOW_VARIABLE(NAME, TITLE, DEFAULT_VALUE);
 //     shows variable as input field
+// SHOW_INFO(TITLE, VALUE);
+//     shows additional information
 // And any JS logic can be used as well
 
 // prepare toolchain
@@ -41,6 +43,8 @@ const default_vlume_Z = 265;
 SHOW_VARIABLE('x_size', 'Print Volume X (mm):', default_vlume_X);
 SHOW_VARIABLE('y_size', 'Print Volume Y (mm):', default_vlume_Y);
 SHOW_VARIABLE('z_size', 'Print Volume Z (mm):', default_vlume_Z);
+SHOW_VARIABLE('is_idex', 'IDEX:', true);
+SHOW_VARIABLE('is_volcano', 'Volcano Hotend:', false);
 SHOW_VARIABLE('chamberEnabled', 'Chamber Enabled:', true);
 SHOW_VARIABLE('domeEnabled', 'Dome Enabled:', true);
 SHOW_VARIABLE('thn', 'Chamber Material Thickness (mm):', '4.0');
@@ -53,9 +57,9 @@ var delta_x = x_size - default_vlume_X;
 var delta_y = y_size - default_vlume_Y;
 var delta_z = z_size - default_vlume_Z;
 
-function dx_f(x) {return x + delta_x};
+function dx_f(x) {return x + delta_x + (is_idex ? 0 : -50)};
 function dy_f(y) {return y + delta_y};
-function dz_f(z) {return z + delta_z};
+function dz_f(z) {return z + delta_z + (is_volcano ? 10 : 0)};
 
 var dx, dy;
 
@@ -76,6 +80,21 @@ window['CIRCLE'] = function (X, Y, R) {
     DECAL('cross', X, Y);
   }
 }
+
+
+// PROFILE LENGTH
+SHOW_INFO('Gantry Beam Y (mm):', dy_f(450));
+SHOW_INFO('Gantry Beam X (mm):', dx_f(650));
+SHOW_INFO('Auxiliary Gantry Beam X (mm):', dx_f(530));
+SHOW_INFO('Corner Pillar (mm):', dz_f(440));
+SHOW_INFO('Auxiliary Pillar (mm):', dz_f(390));
+SHOW_INFO('Auxiliary Base Beam (mm):', dx_f(610));
+SHOW_INFO('Base Beam X (mm):', dx_f(610));
+SHOW_INFO('Base Beam Y (mm):', dy_f(450));
+SHOW_INFO('Z Rail Beam (mm):', dz_f(390));
+SHOW_INFO('Table Beam X (mm):', dx_f(500));
+SHOW_INFO('Table Beam Y (mm):', dy_f(320));
+SHOW_INFO('X Axis Beam (mm):', dx_f(500));
 
 
 // CHAMBER START
@@ -477,7 +496,7 @@ CIRCLE(0, 0, 2.15);
 
 
 // ################
-// PORTAL PANEL
+// GANTRY PANEL
 dx = dx_f; dy = dy_f;
 G28();
 
@@ -488,7 +507,7 @@ G1(E, 0, dy(490));
 G1(E, -dx(650), 0);
 G1(E, 0, -dy(490));
 
-// portal
+// gantry
 G90();
 G1(65, 20);
 G91();
@@ -505,12 +524,15 @@ G1(E, 5, -5);
 G90();
 G1(dx(650) / 2, dy(435));
 G91();
-if (x_size >= 370) {
+var width = x_size + (is_idex ? 0 : -50);
+if (width >= 370 && is_idex) {
   MULTI_CIRCLE(-60, 0, 120, 0, 17, 2);
-} else if (x_size >= 300) {
-  MULTI_CIRCLE(-25, 0, 50, 0, 17, 2);
-} else {
+} else if (width >= 320 && is_idex) {
+  MULTI_CIRCLE(-35, 0, 70, 0, 17, 2);
+} else if (width >= 250) {
   CIRCLE(0, 0, 17);
+} else {
+  CIRCLE((250 - width) / 2, 0, 17);
 }
 
 // holes
@@ -525,8 +547,10 @@ MULTI_CIRCLE_GAP(0, 0, 0, dy(398), 2.15, 110);
 MULTI_CIRCLE_GAP(-40, 0, 0, dy(398), 2.15, 110);
 G1(0, dy(470))
 MULTI_CIRCLE(0, 0, -40, 0, 2.15, 2);
-MULTI_CIRCLE(-20, -16, -185.5, 0, 2.15, 2);
-MULTI_CIRCLE(-20, -56.5, -185.5, 0, 2.15, 2);
+if (width >= 250 && is_idex) {
+  MULTI_CIRCLE(-20, -16, -185.5, 0, 2.15, 2);
+  MULTI_CIRCLE(-20, -56.5, -185.5, 0, 2.15, 2);
+}
 MULTI_CIRCLE_GAP(-80, 0, -dx(470), 0, 2.15, 110);
 MULTI_CIRCLE_GAP(-80, -72, -dx(470), 0, 2.15, 110);
 G1(-dx(630), 0);
@@ -662,7 +686,40 @@ decal['cross'] = {'pth':['M-0.5 0 L0.5 0','M0 -0.5 L0 0.5'],'pll':[],'plg':[]};
 
 <!-- JUST SOME TECHNICAL STUFF IS BELOW -->
 
-<style>* {font-family: Tahoma} textarea {font-family: 'Courier New'} #vartable td, #vartable input {font-size: 12px; padding: 0; margin-top: 1px} #vartable td {text-align: right} #vartable td input {float: left; max-width: 70px} table {border-collapse: collapse}</style>
+<style>
+* {
+	font-family: Tahoma;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+textarea {
+	font-family: 'Courier New';
+}
+
+.tbl td,
+.tbl input {
+	font-size: 12px;
+	padding: 0;
+	margin-top: 1px;
+}
+
+.tbl td:nth-child(odd) {
+	text-align: right;
+  height: 19px;
+}
+
+.tbl td:nth-child(even) {
+	text-align: left;
+  padding-left: 3px;
+}
+
+.tbl td input {
+	max-width: 70px;
+}
+</style>
 <label for="decal_input" style="border: 1px solid; float: left; font-size: 18px; height: 20px; margin-left: 5px; text-align: center; width: 20px;">+</label>
 <input type="file" id="decal_input" style="display: none" accept=".svg">
 </div>
@@ -672,12 +729,22 @@ decal['cross'] = {'pth':['M-0.5 0 L0.5 0','M0 -0.5 L0 0.5'],'pll':[],'plg':[]};
           <button id="switch_code" style="float: left; font-size: 8px" onclick="switchCode()">&rarr; show code</button>
           <div style="clear: both"></div>
           <button id="reset_vars" style="float: left; display: none; margin-top: 5px;" onclick="recreateVars()">Reset Variables</button>
-          <table id="vartable" style="visibility: hidden; clear: both">
+          <table class="tbl" style="clear: both">
+              <tbody id="vartable_header">
+                <tr><td colspan=2 style="font-weight: bold; text-align: center; font-size: 14px">Parameters</td></tr>
+              </tbody>
               <tbody id="vartable_body">
               </tbody>
+              <tbody><tr><td colspan="2" style="text-align: center; font-size: 16px">
+<br><button onclick="perform()">&rarr; Generate</button>&nbsp;&nbsp;Zoom: <input id="view_scale" type="text" value="0.5" style="width: 30px; float: none">&nbsp;&nbsp;
+<br><a id="dldxf" download="Result.dxf" href="#" style="visibility: hidden; clear: both; line-height: 30px">Download DXF</a><br><br>
+              </td></tr></tbody>
+              <tbody id="infotable_header">
+                <tr><td colspan=2 style="font-weight: bold; text-align: center; font-size: 14px">Additional Information</td></tr>
+              </tbody>
+              <tbody id="infotable_body">
+              </tbody>
           </table>
-          <br><button onclick="perform()">&rarr; Generate</button>&nbsp;&nbsp;Zoom: <input id="view_scale" type="text" value="0.5" style="width: 30px">&nbsp;&nbsp;
-          <br><br><a id="dldxf" download="Result.dxf" href="#" style="visibility: hidden; clear: both">Download DXF</a>
         </td><td>
           <div id="svg_sample" style="margin: 10px"></div>
         </td></tr></tbody></table>
@@ -11061,7 +11128,19 @@ and limitations under the License.
             }
             inputElement.onchange = function () {document.getElementById('dldxf').style.visibility = 'hidden'};
             variables.push({name: name, input: inputElement});
-            document.getElementById('vartable').style.visibility = 'visible';
+            document.getElementById('vartable_header').style.visibility = 'visible';
+        }
+        
+        function SHOW_INFO(caption, value) {
+            var tr = document.createElement("tr");
+            document.getElementById("infotable_body").appendChild(tr);
+            var td = document.createElement("td");
+            td.innerHTML = caption;
+            tr.appendChild(td);
+            td = document.createElement("td");
+            td.innerHTML = value;
+            tr.appendChild(td);
+            document.getElementById('infotable_header').style.visibility = 'visible';
         }
 
         // DECAL(NAME, X, Y)
@@ -11284,6 +11363,7 @@ and limitations under the License.
         function recreateVars() {
             variables = [];
             document.getElementById("vartable_body").innerHTML = '';
+            document.getElementById('vartable_header').style.visibility = 'hidden';
             perform();
         }
 
@@ -11300,13 +11380,19 @@ and limitations under the License.
             }
             codeIsShown = !codeIsShown;
         }
+        
+        function prepare() {
+            loadVariables();
+            figures = [];
+            decal = {};
+            document.getElementById("infotable_body").innerHTML = '';
+            document.getElementById('infotable_header').style.visibility = 'hidden';
+        }
 
         function perform() {
             SVG_SCALE = 1 * document.getElementById('view_scale').value;
             try {
-                loadVariables();
-                figures = [];
-                decal = {};
+                prepare();
                 eval(document.getElementById("code").value);
                 eval(document.getElementById("decal").value);
                 G28();
@@ -11317,9 +11403,7 @@ and limitations under the License.
                 throw e;
             }
 
-            loadVariables();
-            figures = [];
-            decal = {};
+            prepare();
             eval(document.getElementById("code").value);
             eval(document.getElementById("decal").value);
             G28();
