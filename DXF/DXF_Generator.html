@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><title>DXF Generator</title></head><body style="margin: 0"><table><tbody><tr><td id="code_td" style="display: none">
+<html><head><meta charset="utf-8"/><title>DXF Generator</title></head><body style="margin: 0"><table><tbody><tr><td id="code_td" style="display: none">
 
 <!-- !!!!!!!!    REPLACE THE CODE BELOW WITH YOUR CODE    !!!!!!!! -->
 <!-- Decal list is right under the code in the next <textarea> tag -->
@@ -30,36 +30,41 @@
 //     centered by ORIGIN_X, ORIGIN_Y in own coordinate system
 //     then scales it to SCALE_X, SCALE_Y and rotates by ANGLE
 // SHOW_VARIABLE(NAME, TITLE, DEFAULT_VALUE);
+// SHOW_VARIABLE(NAME, TITLE, DEFAULT_VALUE, GENERATE_ON_CHANGE);
 //     shows variable as input field
 // SHOW_INFO(TITLE, VALUE);
 //     shows additional information
 // And any JS logic can be used as well
 
 // prepare toolchain
-const default_vlume_X = 400;
-const default_vlume_Y = 250;
-const default_vlume_Z = 265;
 
-SHOW_VARIABLE('x_size', 'Print Volume X (mm):', default_vlume_X);
-SHOW_VARIABLE('y_size', 'Print Volume Y (mm):', default_vlume_Y);
-SHOW_VARIABLE('z_size', 'Print Volume Z (mm):', default_vlume_Z);
+const default_gantry_beam_X = 650;
+const default_gantry_beam_Y = 450;
+const default_corner_pillar_Z = 430;
+
+SHOW_VARIABLE('lang', 'English: ', false, true);
+SHOW_VARIABLE('y_size', lang ? 'Gantry Beam Y (mm):' : 'Продольная балка портала (мм):', default_gantry_beam_Y);
+SHOW_VARIABLE('x_size', lang ? 'Gantry Beam X (mm):' : 'Поперечная балка портала (мм):', default_gantry_beam_X);
+SHOW_VARIABLE('z_size', lang ? 'Corner Pillar (mm):' : 'Угловая стойка (мм):', default_corner_pillar_Z);
+
 SHOW_VARIABLE('is_idex', 'IDEX:', true);
-SHOW_VARIABLE('is_volcano', 'Volcano Hotend:', false);
-SHOW_VARIABLE('chamberEnabled', 'Chamber Enabled:', true);
-SHOW_VARIABLE('domeEnabled', 'Dome Enabled:', true);
-SHOW_VARIABLE('thn', 'Chamber Material Thickness (mm):', '4.0');
-SHOW_VARIABLE('thn_dm', 'Dome Material Thickness (mm):', '4.0');
-SHOW_VARIABLE('fourPillars', 'Number of Z Pillars (off-2, on-4):', false);
-SHOW_VARIABLE('holesEnabled', 'Holes Enabled:', true);
-SHOW_VARIABLE('crossesEnabled', 'Hole Marks Enabled:', false);
+SHOW_VARIABLE('chamberEnabled', lang ? 'Chamber Enabled:' : 'Зашивка корпуса включена:', true);
+SHOW_VARIABLE('domeEnabled', lang ? 'Dome Enabled:' : 'Купол включен:', true);
+SHOW_VARIABLE('thn', lang ? 'Chamber Material Thickness (mm):' : 'Толщина материала зашивки камеры (мм):', '4.0');
+SHOW_VARIABLE('thn_dm', lang ? 'Dome Material Thickness (mm):' : 'Толщина материала зашивки купола (мм):', '4.0');
+SHOW_VARIABLE('fourPillars', lang ? 'Number of Z Pillars (off-2, on-4):' : 'Стоек оси Z (выкл-2, вкл-4):', false);
+SHOW_VARIABLE('spool', lang ? 'Holes for spool holders enabled:' : 'Катушкодержатели включены:', true);
+SHOW_VARIABLE('preserveHoles', lang ? 'Prefer 2 cable holes over spool holders:' : 'Предпочитать 2 отверстия для кабелей<br>отверстиям под катушкодержатель:', true);
+SHOW_VARIABLE('holesEnabled', lang ? 'Holes Enabled:' : 'Отверстия включены:', true);
+SHOW_VARIABLE('crossesEnabled', lang ? 'Hole Marks Enabled:' : 'Метки отверстий включены:', false);
 
-var delta_x = x_size - default_vlume_X;
-var delta_y = y_size - default_vlume_Y;
-var delta_z = z_size - default_vlume_Z;
+var delta_x = x_size - default_gantry_beam_X;
+var delta_y = y_size - default_gantry_beam_Y;
+var delta_z = z_size - default_corner_pillar_Z;
 
-function dx_f(x) {return x + delta_x + (is_idex ? 0 : -50)};
+function dx_f(x) {return x + delta_x};
 function dy_f(y) {return y + delta_y};
-function dz_f(z) {return z + delta_z + (is_volcano ? 10 : 0)};
+function dz_f(z) {return z + delta_z - 10};
 
 var dx, dy;
 
@@ -83,18 +88,18 @@ window['CIRCLE'] = function (X, Y, R) {
 
 
 // PROFILE LENGTH
-SHOW_INFO('Gantry Beam Y (mm):', dy_f(450));
-SHOW_INFO('Gantry Beam X (mm):', dx_f(650));
-SHOW_INFO('Auxiliary Gantry Beam X (mm):', dx_f(530));
-SHOW_INFO('Corner Pillar (mm):', dz_f(440));
-SHOW_INFO('Auxiliary Pillar (mm):', dz_f(390));
-SHOW_INFO('Auxiliary Base Beam (mm):', dx_f(610));
-SHOW_INFO('Base Beam X (mm):', dx_f(610));
-SHOW_INFO('Base Beam Y (mm):', dy_f(450));
-SHOW_INFO('Z Rail Beam (mm):', dz_f(390));
-SHOW_INFO('Table Beam X (mm):', dx_f(500));
-SHOW_INFO('Table Beam Y (mm):', dy_f(320));
-SHOW_INFO('X Axis Beam (mm):', dx_f(500));
+SHOW_INFO(lang ? 'Gantry Beam Y (mm):' : 'Продольная балка портала (мм):', dy_f(450));
+SHOW_INFO(lang ? 'Gantry Beam X (mm):' : 'Поперечная балка портала (мм):', dx_f(650));
+SHOW_INFO(lang ? 'Auxiliary Gantry Beam X (mm):' : 'Вспомогательная балка портала (мм):', dx_f(530));
+SHOW_INFO(lang ? 'Corner Pillar (mm):' : 'Угловая стойка (мм):', dz_f(440));
+SHOW_INFO(lang ? 'Auxiliary Pillar (mm):' : 'Вспомогательная стойка (мм):', dz_f(390));
+SHOW_INFO(lang ? 'Auxiliary Base Beam (mm):' : 'Вспомогательная поперечина (мм):', dx_f(610));
+SHOW_INFO(lang ? 'Base Beam X (mm):' : 'Поперечная балка основания (мм):', dx_f(610));
+SHOW_INFO(lang ? 'Base Beam Y (mm):' : 'Продольная балка основания (мм):', dy_f(450));
+SHOW_INFO(lang ? 'Z Rail Beam (mm):' : 'Стойка оси Z (мм):', dz_f(390));
+SHOW_INFO(lang ? 'Table Beam X (mm):' : 'Поперечная балка рамы стола (мм):', dx_f(500));
+SHOW_INFO(lang ? 'Table Beam Y (mm):' : 'Продольные балки рамы стола (мм):', dy_f(320));
+SHOW_INFO(lang ? 'X Axis Beam (mm):' : 'Балка оси X (мм):', dx_f(500));
 
 
 // CHAMBER START
@@ -273,9 +278,9 @@ MULTI_CIRCLE_GAP(0, -80, 0, -(dy(410) - 160), 2.15, 110);
 // ################
 // REAR HATCH
 const default_fan_diam = 120;
-SHOW_VARIABLE('fan_diam', 'Rear Fan Size (mm):', default_fan_diam);
-SHOW_VARIABLE('fan_h_dist', 'Rear Fan Holes Gap (mm):', 105);
-SHOW_VARIABLE('fan_grille', 'Rear Fan Grille Enabled:', true);
+SHOW_VARIABLE('fan_diam', lang ? 'Rear Fan Size (mm):' : 'Размер вентилятора обдува электроники (мм):', default_fan_diam);
+SHOW_VARIABLE('fan_h_dist', lang ? 'Rear Fan Holes Gap (mm):' : 'Расстояние между отверстиями вентилятора (мм):', 105);
+SHOW_VARIABLE('fan_grille', lang ? 'Rear Fan Grille Enabled:' : 'Зашитная сетка вентилятора включена:', true);
 dx = dx_f; dy = dz_f;
 G28();
 G91();
@@ -390,7 +395,10 @@ for (var i = 0; i < 2; i++) {
 
   // ventilation
   G90();
-  for (var x = 10 + dx(398) + 72 / 2, y = 40 + dy(410) - 83, sign = 1; y > 120; y -= 122, sign = -sign) {
+  var verticalSpace = 122 * 3 + dy(0)
+  var maxVentCount = Math.floor(verticalSpace / 122)
+  var firstVentYShift = (verticalSpace - maxVentCount * 122) / 2;
+  for (var x = 10 + dx(398) + 72 / 2, y = 40 + dy(410) - 83 - firstVentYShift, sign = 1; y > 120; y -= 122, sign = -sign) {
     DECAL('side_hole', x, y, sign * 10, 10, 0, 19.9, -55.21);
   }
 }
@@ -524,15 +532,17 @@ G1(E, 5, -5);
 G90();
 G1(dx(650) / 2, dy(435));
 G91();
-var width = x_size + (is_idex ? 0 : -50);
-if (width >= 370 && is_idex) {
+var width = x_size;
+if (is_idex && (width >= 620 || !spool)) {
   MULTI_CIRCLE(-60, 0, 120, 0, 17, 2);
-} else if (width >= 320 && is_idex) {
+} else if (is_idex && width >= 570) {
   MULTI_CIRCLE(-35, 0, 70, 0, 17, 2);
-} else if (width >= 250) {
+} else if (!spool || ((!is_idex || !preserveHoles) && width >= 500)) {
   CIRCLE(0, 0, 17);
+} else if (!is_idex || !preserveHoles) {
+  CIRCLE((500 - width) / 2, 0, 17);
 } else {
-  CIRCLE((250 - width) / 2, 0, 17);
+  MULTI_CIRCLE((500 - width) / 2, 0, 70, 0, 17, 2);
 }
 
 // holes
@@ -547,7 +557,7 @@ MULTI_CIRCLE_GAP(0, 0, 0, dy(398), 2.15, 110);
 MULTI_CIRCLE_GAP(-40, 0, 0, dy(398), 2.15, 110);
 G1(0, dy(470))
 MULTI_CIRCLE(0, 0, -40, 0, 2.15, 2);
-if (width >= 250 && is_idex) {
+if (spool && is_idex && ((width >= 500 && !preserveHoles) || width >= 570)) {
   MULTI_CIRCLE(-20, -16, -185.5, 0, 2.15, 2);
   MULTI_CIRCLE(-20, -56.5, -185.5, 0, 2.15, 2);
 }
@@ -555,8 +565,10 @@ MULTI_CIRCLE_GAP(-80, 0, -dx(470), 0, 2.15, 110);
 MULTI_CIRCLE_GAP(-80, -72, -dx(470), 0, 2.15, 110);
 G1(-dx(630), 0);
 MULTI_CIRCLE(0, 0, 40, 0, 2.15, 2);
-MULTI_CIRCLE(20, -16, 185.5, 0, 2.15, 2);
-MULTI_CIRCLE(20, -56.5, 185.5, 0, 2.15, 2);
+if (spool) {
+  MULTI_CIRCLE(20, -16, 185.5, 0, 2.15, 2);
+  MULTI_CIRCLE(20, -56.5, 185.5, 0, 2.15, 2);
+}
 
 }
 // CHAMBER END
@@ -695,6 +707,14 @@ table {
 	border-collapse: collapse;
 }
 
+tr:nth-child(even) {
+	background: #F0F0F0
+}
+
+tr:nth-child(odd) {
+	background: #FFF
+}
+
 textarea {
 	font-family: 'Courier New';
 }
@@ -704,6 +724,13 @@ textarea {
 	font-size: 12px;
 	padding: 0;
 	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+.tbl input[type="checkbox"] {
+  position: relative;
+  top: 2px;
+  left: -4px;
 }
 
 .tbl td:nth-child(odd) {
@@ -11101,8 +11128,13 @@ and limitations under the License.
             posY = tmpY;
         }
 
-        function SHOW_VARIABLE(name, caption, defaultValue) {
-            if (name === undefined || findVariable(name)) {
+        function SHOW_VARIABLE(name, caption, defaultValue, generateOnChange) {
+            if (name === undefined) {
+                return;
+            }
+            if (findVariable(name)) {
+                var v = findVariable(name);
+                v.td_caption.innerHTML = caption;
                 return;
             }
             if (defaultValue === true || defaultValue === false) {
@@ -11112,10 +11144,10 @@ and limitations under the License.
             }
             var tr = document.createElement("tr");
             document.getElementById("vartable_body").appendChild(tr);
+            var td_caption = document.createElement("td");
+            td_caption.innerHTML = caption;
+            tr.appendChild(td_caption);
             var td = document.createElement("td");
-            td.innerHTML = caption;
-            tr.appendChild(td);
-            td = document.createElement("td");
             tr.appendChild(td);
             var inputElement = document.createElement("input");
             td.appendChild(inputElement);
@@ -11126,8 +11158,11 @@ and limitations under the License.
                 inputElement.type = 'text';
                 inputElement.value = defaultValue;
             }
-            inputElement.onchange = function () {document.getElementById('dldxf').style.visibility = 'hidden'};
-            variables.push({name: name, input: inputElement});
+            inputElement.onchange = function () {
+                document.getElementById('dldxf').style.visibility = 'hidden';
+                if (generateOnChange) perform();
+            };
+            variables.push({name: name, input: inputElement, td_caption: td_caption});
             document.getElementById('vartable_header').style.visibility = 'visible';
         }
         
