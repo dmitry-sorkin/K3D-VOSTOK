@@ -64,7 +64,7 @@ var delta_z = z_size - default_corner_pillar_Z;
 
 function dx_f(x) {return x + delta_x};
 function dy_f(y) {return y + delta_y};
-function dz_f(z) {return z + delta_z - 10};
+function dz_f(z) {return z + delta_z};
 
 var dx, dy;
 
@@ -395,10 +395,10 @@ for (var i = 0; i < 2; i++) {
 
   // ventilation
   G90();
-  var verticalSpace = 122 * 3 + dy(0)
-  var maxVentCount = Math.floor(verticalSpace / 122)
+  var verticalSpace = 122 * 3 + dy(0);
+  var maxVentCount = Math.floor((verticalSpace + 4) / 122); //"+ 4" provides slight flexibility around default height
   var firstVentYShift = (verticalSpace - maxVentCount * 122) / 2;
-  for (var x = 10 + dx(398) + 72 / 2, y = 40 + dy(410) - 83 - firstVentYShift, sign = 1; y > 120; y -= 122, sign = -sign) {
+  for (var x = 10 + dx(398) + 72 / 2, y = 40 + dy(410) - 83 - firstVentYShift, sign = 1; y > 100; y -= 122, sign = -sign) {
     DECAL('side_hole', x, y, sign * 10, 10, 0, 19.9, -55.21);
   }
 }
