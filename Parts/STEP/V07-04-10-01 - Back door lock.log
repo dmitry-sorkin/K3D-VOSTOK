@@ -1,0 +1,63 @@
+﻿UG to STEP
+! INFO-     NX STEP AP242 - V1899
+! INFO-      
+! INFO-     Start of Translation: 11-AUG-2022  5:26:29 PM
+! INFO-      
+! STATUS-   Converting Part: G:\project_bulba\V0.8\V07-04-10-01 - Back door lock.prt
+! STATUS-    
+! STATUS-   Converting to Output Form (Phase 2 of 3): 11-AUG-2022 5:26:29 PM
+! STATUS-    
+! INFO-           Summary of STEP Entities 
+! INFO-      
+! INFO-     Entity Type                                                   Count 
+! INFO-     -----------                                                   ------ 
+! INFO-     advanced_brep_shape_representation .......................:   1 
+! INFO-     advanced_face ............................................:   337 
+! INFO-     application_context ......................................:   1 
+! INFO-     application_protocol_definition ..........................:   1 
+! INFO-     axis2_placement_3d .......................................:   348 
+! INFO-     b_spline_curve_with_knots_and_rational_b_spline_curve ....:   416 
+! INFO-     cartesian_point ..........................................:   2736 
+! INFO-     circle ...................................................:   10 
+! INFO-     closed_shell .............................................:   1 
+! INFO-     colour_rgb ...............................................:   1 
+! INFO-     cylindrical_surface ......................................:   211 
+! INFO-     direction ................................................:   1178 
+! INFO-     edge_curve ...............................................:   908 
+! INFO-     edge_loop ................................................:   338 
+! INFO-     face_bound ...............................................:   338 
+! INFO-     fill_area_style ..........................................:   1 
+! INFO-     fill_area_style_colour ...................................:   1 
+! INFO-     geometric_representation_context_and_global_uncertainty_a :   1 
+! INFO-     length_unit_and_si_unit ..................................:   1 
+! INFO-     line .....................................................:   482 
+! INFO-     manifold_solid_brep ......................................:   1 
+! INFO-     mechanical_design_geometric_presentation_representation ..:   1 
+! INFO-     oriented_edge ............................................:   1816 
+! INFO-     plane ....................................................:   126 
+! INFO-     plane_angle_unit_and_si_unit .............................:   1 
+! INFO-     presentation_style_assignment ............................:   1 
+! INFO-     product ..................................................:   1 
+! INFO-     product_category .........................................:   1 
+! INFO-     product_context ..........................................:   1 
+! INFO-     product_definition .......................................:   1 
+! INFO-     product_definition_context ...............................:   1 
+! INFO-     product_definition_formation_with_specified_source .......:   1 
+! INFO-     product_definition_shape .................................:   1 
+! INFO-     product_related_product_category .........................:   1 
+! INFO-     shape_definition_representation ..........................:   1 
+! INFO-     shape_representation .....................................:   1 
+! INFO-     shape_representation_relationship ........................:   1 
+! INFO-     si_unit_and_solid_angle_unit .............................:   1 
+! INFO-     styled_item ..............................................:   1 
+! INFO-     surface_side_style .......................................:   1 
+! INFO-     surface_style_fill_area ..................................:   1 
+! INFO-     surface_style_usage ......................................:   1 
+! INFO-     uncertainty_measure_with_unit ............................:   1 
+! INFO-     vector ...................................................:   482 
+! INFO-     vertex_point .............................................:   574 
+! INFO-                                                                  ------- 
+! INFO-     Total                                                         10330 
+! INFO-      
+! INFO-     End of Translation: 11-AUG-2022  5:26:34 PM
+! INFO-      
